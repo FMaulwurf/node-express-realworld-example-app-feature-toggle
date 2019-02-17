@@ -10,6 +10,7 @@ var ArticleSchema = new mongoose.Schema({
   body: String,
   favoritesCount: {type: Number, default: 0},
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  shares: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Share' }],
   tagList: [{ type: String }],
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {timestamps: true});
