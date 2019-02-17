@@ -12,7 +12,8 @@ ShareSchema.methods.toJSONFor = function(user){
     id: this._id,
     sharetype: this.sharetype,
     createdAt: this.createdAt,
-    author: this.author.toProfileJSONFor(user)
+    author: this.author.toProfileJSONFor(user),
+    article: this.article
   };
 };
 
