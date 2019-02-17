@@ -2,6 +2,7 @@ var router = require('express').Router();
 var mongoose = require('mongoose');
 var Article = mongoose.model('Article');
 var Comment = mongoose.model('Comment');
+var Share = mongoose.model('Share');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
@@ -259,6 +260,48 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
       return req.article.save().then(function(article) {
         res.json({comment: comment.toJSONFor(user)});
       });
+    });
+  }).catch(next);
+});
+
+// create a new share
+router.post('/:article/shares', auth.required, function(req, res, next) {
+  User.findById(req.payload.id).then(function(user){
+    if(!user){ return res.sendStatus(401); }
+
+    var share = new Share(req.body.share);
+    share.article = req.article;
+    share.author = user;
+
+    return share.save().then(function(){
+      req.article.shares.push(share);
+
+      return req.article.save().then(function(article) {
+        res.json({share: share.toJSONFor(user)});
+      });
+    });
+  }).catch(next);
+});
+
+// return an article's shares
+router.get('/:article/shares', auth.required, function(req, res, next){
+  User.findById(req.payload.id).then(function(user){
+    if(!user){ return res.sendStatus(401); }
+
+    return req.article.populate({
+      path: 'shares',
+      populate: {
+        path: 'author'
+      },
+      options: {
+        sort: {
+          createdAt: 'desc'
+        }
+      }
+    }).execPopulate().then(function(article) {
+      return res.json({shares: req.article.shares.map(function(share){
+        return share.toJSONFor(user);
+      })});
     });
   }).catch(next);
 });

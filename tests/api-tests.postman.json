@@ -1651,6 +1651,116 @@
       ]
     },
     {
+      "name": "Shares",
+      "description": "",
+      "item": [{
+          "name": "All Shares for Article with out",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var is200Response = responseCode.code === 200",
+                "",
+                "tests['Response code is 200 OK'] = is200Response;",
+                "",
+                "if(is200Response){",
+                "    var responseJSON = JSON.parse(responseBody);",
+                "",
+                "    tests['Response contains \"shares\" property'] = responseJSON.hasOwnProperty('shares');",
+                "",
+                "    if(responseJSON.shares.length){",
+                "        var share = responseJSON.shares[0];",
+                "",
+                "        tests['Share has \"id\" property'] = share.hasOwnProperty('id');",
+                "        tests['Share has \"article\" property'] = share.hasOwnProperty('article');",
+                "        tests['Share has \"createdAt\" property'] = share.hasOwnProperty('createdAt');",
+                "        tests['\"createdAt\" property is an ISO 8601 timestamp'] = new Date(share.createdAt).toISOString() === share.createdAt;",
+                "        tests['Share has \"updatedAt\" property'] = share.hasOwnProperty('updatedAt');",
+                "        tests['\"updatedAt\" property is an ISO 8601 timestamp'] = new Date(share.updatedAt).toISOString() === share.updatedAt;",
+                "        tests['Share has \"author\" property'] = share.hasOwnProperty('author');",
+                "    }",
+                "}",
+                ""
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}/shares",
+            "method": "GET",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {},
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Create Share for Article",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var responseJSON = JSON.parse(responseBody);",
+                "",
+                "tests['Response contains \"share\" property'] = responseJSON.hasOwnProperty('share');",
+                "",
+                "var share = responseJSON.share || {};",
+                "",
+                "tests['Share has \"id\" property'] = share.hasOwnProperty('id');",
+                "tests['Share has \"article\" property'] = share.hasOwnProperty('article');",
+                "tests['Share has \"createdAt\" property'] = share.hasOwnProperty('createdAt');",
+                "tests['\"createdAt\" property is an ISO 8601 timestamp'] = new Date(share.createdAt).toISOString() === share.createdAt;",
+                "tests['Share has \"author\" property'] = share.hasOwnProperty('author');",
+                ""
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/articles/{{slug}}/shares",
+            "method": "POST",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"share\":{\"sharetype\":\"facebook\"}}"
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Profiles",
       "description": "",
       "item": [{
