@@ -11,7 +11,7 @@ var http = require('http'),
     fflip = require('fflip');
 
 var isProduction = process.env.NODE_ENV === 'production';
-console.log('APP IS IN PRODUCTION', isProduction, process.env.NODE_ENV)
+
 // Create global app object
 var app = express();
 
