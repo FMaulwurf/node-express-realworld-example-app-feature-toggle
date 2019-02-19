@@ -1760,6 +1760,59 @@
         }
       ]
     },
+    ,
+    {
+      "name": "Features",
+      "description": "",
+      "item": [{
+          "name": "All Feature Toggles",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "var is200Response = responseCode.code === 200",
+                "",
+                "tests['Response code is 200 OK'] = is200Response;",
+                "",
+                "if(is200Response){",
+                "    var responseJSON = JSON.parse(responseBody);",
+                "",
+                "    tests['Response contains \"features\" property'] = responseJSON.hasOwnProperty('features');",
+                "",
+                "    tests['Features has \"length\" of 0'] = responseJSON.features.length === 0;",
+                "", 
+                "}",
+                ""
+              ]
+            }
+          }],
+          "request": {
+            "url": "{{apiUrl}}/features",
+            "method": "GET",
+            "header": [{
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": ""
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": ""
+              },
+              {
+                "key": "Authorization",
+                "value": "Token {{token}}",
+                "description": ""
+              }
+            ],
+            "body": {},
+            "description": ""
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Profiles",
       "description": "",
