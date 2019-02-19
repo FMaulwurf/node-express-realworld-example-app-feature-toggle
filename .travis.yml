@@ -6,6 +6,11 @@ services: mongodb
 
 install: yarn
 
-before_script: yarn start & sleep 5
-script: yarn test
-script: yarn testdev
+jobs:
+  include:
+    - stage: features_OFF
+      before_script: yarn start & sleep 5
+      script: yarn test
+    - stage: features_ON
+      before_script: yarn start & sleep 5
+      script: yarn testdev
