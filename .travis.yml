@@ -8,9 +8,9 @@ install: yarn
 
 jobs:
   include:
-    - stage: features_OFF
+    - stage: features_off
       before_script: yarn start & sleep 5
       script: yarn test
-    - stage: features_ON
+    - stage: features_on
       before_script: yarn start & sleep 5
       script: yarn testdev
