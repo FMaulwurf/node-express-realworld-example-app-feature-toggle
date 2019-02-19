@@ -7,14 +7,23 @@ var http = require('http'),
     cors = require('cors'),
     passport = require('passport'),
     errorhandler = require('errorhandler'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    fflip = require('fflip');
 
 var isProduction = process.env.NODE_ENV === 'production';
-
+console.log('APP IS IN PRODUCTION', isProduction, process.env.NODE_ENV)
 // Create global app object
 var app = express();
 
 app.use(cors());
+
+// SETUP FFLIP
+var Features = require('./features').Features;
+fflip.config({
+  criteria: [],
+  features: Features,
+  reload: 3
+});
 
 // Normal express config defaults
 app.use(require('morgan')('dev'));
