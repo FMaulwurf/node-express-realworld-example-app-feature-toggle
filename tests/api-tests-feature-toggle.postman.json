@@ -1779,8 +1779,6 @@
                 "",
                 "    tests['Response contains \"features\" property'] = responseJSON.hasOwnProperty('features');",
                 "",
-                "    tests['Features has \"length\" of 0'] = responseJSON.features.length === 0;",
-                "",
                 "    tests['Features has \"length\" of 2'] = responseJSON.features.length === 2;",
                 "", 
                 "}",
