@@ -12,5 +12,5 @@ jobs:
       before_script: yarn start & sleep 5
       script: yarn test
     - stage: features_on
-      before_script: yarn start & sleep 5
+      before_script: yarn startdev & sleep 5
       script: yarn testdev

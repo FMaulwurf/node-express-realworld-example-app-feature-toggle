@@ -6,6 +6,7 @@
   "scripts": {
     "mongo:start": "docker run --name realworld-mongo -p 27017:27017 mongo & sleep 5",
     "start": "node ./app.js",
+    "startdev": "NODE_ENV=development node ./app.js",
     "dev": "NODE_ENV=development nodemon ./app.js",
     "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
     "testdev": "NODE_ENV=development newman run ./tests/api-tests-feature-toggle.postman.json -e ./tests/env-api-tests.postman.json",
