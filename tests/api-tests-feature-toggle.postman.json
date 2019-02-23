@@ -1654,7 +1654,7 @@
       "name": "Shares",
       "description": "",
       "item": [{
-          "name": "All Shares for Article with out",
+          "name": "All Shares for Article with auth",
           "event": [{
             "listen": "test",
             "script": {

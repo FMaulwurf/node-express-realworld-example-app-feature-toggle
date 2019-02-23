@@ -6,6 +6,10 @@ var Share = mongoose.model('Share');
 var User = mongoose.model('User');
 var auth = require('../auth');
 
+var factory = require('../../features/featureAwareFactory');
+var decisions = require('../../features/featureDecisions');
+let featureProvider = require('../../features/featuresProvider');
+
 // Preload article objects on routes with ':article'
 router.param('article', function(req, res, next, slug) {
   Article.findOne({ slug: slug})
@@ -264,47 +268,57 @@ router.post('/:article/comments', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
-// create a new share
-router.post('/:article/shares', auth.required, function(req, res, next) {
-  User.findById(req.payload.id).then(function(user){
-    if(!user){ return res.sendStatus(401); }
+factory.featureAwareFactoryBasedOn(
+  decisions.createFeatureDecisions(featureProvider.getActiveFeatures()).includeArticleShareFeature()
+).allowedToReturnRoute(
+  // create a new share
+  router.post('/:article/shares', auth.required, function(req, res, next) {
+    User.findById(req.payload.id).then(function(user){
+      if(!user){ return res.sendStatus(401); }
 
-    var share = new Share(req.body.share);
-    share.article = req.article;
-    share.author = user;
+      var share = new Share(req.body.share);
+      share.article = req.article;
+      share.author = user;
 
-    return share.save().then(function(){
-      req.article.shares.push(share);
+      return share.save().then(function(){
+        req.article.shares.push(share);
 
-      return req.article.save().then(function(article) {
-        res.json({share: share.toJSONFor(user)});
+        return req.article.save().then(function(article) {
+          res.json({share: share.toJSONFor(user)});
+        });
       });
-    });
-  }).catch(next);
-});
+    }).catch(next);
+  })
+);
 
-// return an article's shares
-router.get('/:article/shares', auth.required, function(req, res, next){
-  User.findById(req.payload.id).then(function(user){
-    if(!user){ return res.sendStatus(401); }
 
-    return req.article.populate({
-      path: 'shares',
-      populate: {
-        path: 'author'
-      },
-      options: {
-        sort: {
-          createdAt: 'desc'
+
+factory.featureAwareFactoryBasedOn(
+  decisions.createFeatureDecisions(featureProvider.getActiveFeatures()).includeArticleStatisticsFeature()
+).allowedToReturnRoute(
+  // return an article's shares
+  router.get('/:article/shares', auth.required, function(req, res, next){
+    User.findById(req.payload.id).then(function(user){
+      if(!user){ return res.sendStatus(401); }
+
+      return req.article.populate({
+        path: 'shares',
+        populate: {
+          path: 'author'
+        },
+        options: {
+          sort: {
+            createdAt: 'desc'
+          }
         }
-      }
-    }).execPopulate().then(function(article) {
-      return res.json({shares: req.article.shares.map(function(share){
-        return share.toJSONFor(user);
-      })});
-    });
-  }).catch(next);
-});
+      }).execPopulate().then(function(article) {
+        return res.json({shares: req.article.shares.map(function(share){
+          return share.toJSONFor(user);
+        })});
+      });
+    }).catch(next);
+  })
+);
 
 router.delete('/:article/comments/:comment', auth.required, function(req, res, next) {
   if(req.comment.author.toString() === req.payload.id.toString()){
