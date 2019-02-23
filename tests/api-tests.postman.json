@@ -1660,9 +1660,9 @@
             "script": {
               "type": "text/javascript",
               "exec": [
-                "var is404Response = responseCode.code === 404",
+                "var is404Response = responseCode.code === 200",
                 "",
-                "tests['Response code is 404 OK'] = is404Response;"
+                "tests['Response code is 404 NOT FOUND'] = is404Response;"
               ]
             }
           }],
@@ -1688,7 +1688,16 @@
             "body": {},
             "description": ""
           },
-          "response": []
+          "response": {
+            "status": {
+              "type": "string",
+              "description": "404 NOT FOUND"
+            },
+            "code": {
+              "type": "integer",
+              "description": "404"
+            }
+          }
         },
         {
           "name": "Create Share for Article",
@@ -1697,9 +1706,9 @@
             "script": {
               "type": "text/javascript",
               "exec": [
-                "var is404Response = responseCode.code === 404",
+                "var is404Response = responseCode.code === 200",
                 "",
-                "tests['Response code is 404 OK'] = is404Response;"
+                "tests['Response code is 404 NOT FOUND'] = is404Response;"
               ]
             }
           }],
